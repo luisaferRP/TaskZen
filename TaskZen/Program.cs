@@ -1,4 +1,16 @@
+using DotNetEnv;
+using Microsoft.EntityFrameworkCore;
+using TaskZen.Data;
+
+Env.Load();
+
 var builder = WebApplication.CreateBuilder(args);
+
+var Connection = Environment.GetEnvironmentVariable("CONNECTION_STRING");
+
+//Cadena de conexión de sql server
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(Connection));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

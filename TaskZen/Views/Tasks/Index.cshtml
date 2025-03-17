@@ -1,0 +1,61 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model List<TaskZen.Models.Task.TaskModel>
+
+<div class="container mt-3">
+    <div class="d-flex justify-content-between align-items-center border-bottom pb-2">
+        <h3 class="fw-bold">Mis tareas</h3>
+        <div>
+            <button class="p-2 bg-info bg-opacity-10 border border-info rounded-4">
+                <i class="bi bi-plus-lg"></i> Nueva tarea
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-4">
+    <div class="row">
+
+        <!-- To Do -->
+        <div class="col-md-4">
+            <div class="task-column todo" id="ToDo">
+                <h3 class="text-dark">To Do</h3>
+                <div class="task-list">
+                    @foreach (var task in Model.Where(t => t.Status == StatusLevel.ToDo))
+                    {
+                        @await Html.PartialAsync("_TaskCard", task)
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- In Progres -->
+        <div class="col-md-4">
+            <div class="task-column in-progress" id="InProgress">
+                <h3 class="text-dark">InProgress</h3>
+                <div class="task-list">
+                    @foreach (var task in Model.Where(t => t.Status == StatusLevel.InProgress))
+                    {
+                        @await Html.PartialAsync("_TaskCard", task)
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Done -->
+        <div class="col-md-4">
+            <div class="task-column done" id="Done">
+                <h3 class="text-dark">Done</h3>
+                <div class="task-list">
+                    @foreach (var task in Model.Where(t => t.Status == StatusLevel.Done))
+                    {
+                        @await Html.PartialAsync("_TaskCard", task)
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

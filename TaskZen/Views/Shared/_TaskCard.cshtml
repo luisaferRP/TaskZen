@@ -1,0 +1,21 @@
+﻿@model TaskZen.Models.Task.TaskModel
+
+<div class="task-card shadow-sm p-3 bg-white rounded" id="task-@Model.Id">
+    <div class="d-flex justify-content-between align-items-center">
+        <h5 class="task-title fw-semibold text-dark mb-0">@Model.Title</h5>
+        <span class="badge rounded-2 @(Model.Priority == PriorityLevel.Baja ? "bg-primary bg-opacity-10 border border-primary text-primary" :
+                   Model.Priority == PriorityLevel.Media ? "bg-warning bg-opacity-10 border border-warning text-warning" :
+                   "bg-danger bg-opacity-10 border border-danger text-danger")">
+            @Model.Priority
+        </span>
+     </div>
+    <p class="task-description  text-muted  my-2">@Model.Description</p>
+    <div class="d-flex justify-content-end">
+        <button class="btn btn-sm btn-outline-secondary edit-task me-2" data-id="@Model.Id">
+            <i class="bi bi-pencil"></i>
+        </button>
+        <button class="btn btn-sm btn-outline-danger delete-task" data-id="@Model.Id">
+            <i class="bi bi-trash"></i>
+        </button>
+    </div>
+</div>
