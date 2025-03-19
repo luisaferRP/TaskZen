@@ -9,6 +9,7 @@
 @{
     var priotities = Enum.GetValues(typeof(PriorityLevel)).Cast<PriorityLevel>();
     var statuses = Enum.GetValues(typeof(StatusLevel)).Cast<StatusLevel>();
+    var labels = Enum.GetValues(typeof(LabelLevel)).Cast<LabelLevel>();
 }
 
 
@@ -28,6 +29,16 @@
             <div class="mb-3">
                 <label class="form-label fw-bold">Descripción</label>
                 <textarea class="form-control rounded-3 shadow-sm" asp-for="Description" rows="2" placeholder="Ej. Comprar leche, pan y frutas" required></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-bold">Etiqueta</label>
+                <select class="form-select rounded-3 shadow-sm" asp-for="Label">
+                    @foreach (var label in labels)
+                    {
+                        <option value="@label">@label</option>
+                    }
+                </select>
             </div>
 
             <div class="mb-3">

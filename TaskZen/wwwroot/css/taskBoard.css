@@ -92,6 +92,40 @@
         border: 1px solid #dc3545;
     }
 
+    .priority-badge.estudio {
+        width: 127px;
+        background-color: #E8F9E8;
+        color: #309035;
+        border: 1px solid #309035;
+    }
+
+    .priority-badge.dormirmejor {
+        width: 127px;
+        background: rgba(0, 123, 255, 0.1);
+        color: #007bff;
+        border: 1px solid #007bff;
+    }
+
+    .priority-badge.ejercicio {
+        width: 127px;
+        background: rgba(255, 193, 7, 0.1);
+        color: #ffc107;
+        border: 1px solid #ffc107;
+    }
+
+    .priority-badge.relajacion {
+        width: 127px;
+        background-color: #EAFBFF;
+        color: #34D3FF;
+        border: 1px solid #34D3FF;
+    }
+    .priority-badge.compras {
+        width: 127px;
+        background: rgba(220, 53, 69, 0.1);
+        color: #dc3545;
+        border: 1px solid #dc3545;
+    }
+
 /* Botones con mejor estilo */
 .edit-task, .delete-task {
     padding: 6px 12px;
@@ -124,8 +158,6 @@
     }
 
 
-
-//etiquetas
-.betiq {
-    btn btn-sm border
+.task-date {
+    width:120px;
 }

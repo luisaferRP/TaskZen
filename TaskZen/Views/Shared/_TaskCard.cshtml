@@ -14,10 +14,17 @@
     <p class="task-description text-muted my-2 text-truncate fs-6" title="@Model.Description">
         @Model.Description
     </p>
-    <div class="task-date d-inline-flex align-items-center px-2 py-1 rounded-2 bg-light-subtle border text-secondary small">
-        <i class="bi bi-clock text-primary me-1"></i>
-        <span>@(Model.DueDate.HasValue ? Model.DueDate.Value.ToString("dd/MM/yyyy") : "Sin fecha")</span>
-    </div>
+
+    <div class="d-flex flex-column">
+        <!-- Etiqueta -->
+        <span class="priority-badge @(Model.Label.ToString().ToLower())">
+            @Model.Label
+        </span>
+        <div class="task-date mt-2 d-inline-flex align-items-center px-2 py-1 rounded-2 bg-light-subtle border text-secondary small">
+            <i class="bi bi-clock text-primary me-1"></i>
+            <span>@(Model.DueDate.HasValue ? Model.DueDate.Value.ToString("dd/MM/yyyy") : "Sin fecha")</span>
+        </div>
+     </div>
 
     <div class="d-flex justify-content-end">
         <a class="btn btn-sm btn-outline-secondary edit-task me-2" asp-controller="Tasks" asp-action="Editar" asp-route-id="@Model.Id">

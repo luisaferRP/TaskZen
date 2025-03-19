@@ -10,6 +10,7 @@
         public DateTime? DueDate { get; set; }
         public StatusLevel Status { get; set; }
         public PriorityLevel Priority { get; set; }
+        public LabelLevel Label { get; set; }
     }
 }
 
@@ -26,5 +27,14 @@ public enum StatusLevel
     Hacer,
     EnProgreso,
     Terminado
+}
+
+public enum LabelLevel
+{
+    DormirMejor,
+    Estudio,
+    Ejercicio,
+    Relajacion,
+    Compras
 }
 
