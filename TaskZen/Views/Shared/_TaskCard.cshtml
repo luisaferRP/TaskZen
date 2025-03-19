@@ -1,21 +1,79 @@
 ﻿@model TaskZen.Models.Task.TaskModel
 
-<div class="task-card shadow-sm p-3 bg-white rounded" id="task-@Model.Id">
-    <div class="d-flex justify-content-between align-items-center">
-        <h5 class="task-title fw-semibold text-dark mb-0">@Model.Title</h5>
-        <span class="badge rounded-2 @(Model.Priority == PriorityLevel.Baja ? "bg-primary bg-opacity-10 border border-primary text-primary" :
-                   Model.Priority == PriorityLevel.Media ? "bg-warning bg-opacity-10 border border-warning text-warning" :
-                   "bg-danger bg-opacity-10 border border-danger text-danger")">
+<div class="task-card p-3 rounded-4 shadow-sm bg-white position-relative" id="task-@Model.Id">
+    <div class="d-flex justify-content-between align-items-center mb-2">
+        <h5 class="task-title fw-bold text-dark m-0 fs-5">@Model.Title</h5>
+
+        <!-- Prioridad con diseño moderno -->
+        <span class="priority-badge @(Model.Priority == PriorityLevel.Baja ? "low" :
+                   Model.Priority == PriorityLevel.Media ? "medium" : "high")">
             @Model.Priority
         </span>
-     </div>
-    <p class="task-description  text-muted  my-2">@Model.Description</p>
+    </div>
+
+    <p class="task-description text-muted my-2 text-truncate fs-6" title="@Model.Description">
+        @Model.Description
+    </p>
+    <div class="task-date d-inline-flex align-items-center px-2 py-1 rounded-2 bg-light-subtle border text-secondary small">
+        <i class="bi bi-clock text-primary me-1"></i>
+        <span>@(Model.DueDate.HasValue ? Model.DueDate.Value.ToString("dd/MM/yyyy") : "Sin fecha")</span>
+    </div>
+
     <div class="d-flex justify-content-end">
-        <button class="btn btn-sm btn-outline-secondary edit-task me-2" data-id="@Model.Id">
+        <a class="btn btn-sm btn-outline-secondary edit-task me-2" asp-controller="Tasks" asp-action="Editar" asp-route-id="@Model.Id">
             <i class="bi bi-pencil"></i>
-        </button>
+        </a>
+
         <button class="btn btn-sm btn-outline-danger delete-task" data-id="@Model.Id">
             <i class="bi bi-trash"></i>
         </button>
     </div>
 </div>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".delete-task").forEach(button => {
+            button.addEventListener("click", async function () {
+                const taskId = this.getAttribute("data-id");
+
+                // Muestra la alerta de confirmación
+                Swal.fire({
+                    title: "¿Estás seguro?",
+                    text: "Esta acción no se puede deshacer.",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#d33",
+                    cancelButtonColor: "#3085d6",
+                    confirmButtonText: "Sí, eliminar",
+                    cancelButtonText: "Cancelar"
+                }).then(async (result) => {
+                    if (result.isConfirmed) {
+                        const response = await fetch(`/Tasks/Eliminar/${taskId}`, {
+                            method: "DELETE"
+                        });
+
+                        if (response.ok) {
+                            Swal.fire({
+                                position: "top-end",
+                                title: "Eliminado",
+                                text: "La tarea ha sido eliminada con éxito.",
+                                icon: "success",
+                                timer: 2000,
+                                showConfirmButton: false
+                            }).then(() => {
+                                location.reload(); // Recargar la página para actualizar la lista
+                            });
+                        } else {
+                            Swal.fire({
+                                title: "Error",
+                                text: "No se pudo eliminar la tarea.",
+                                icon: "error"
+                            });
+                        }
+                    }
+                });
+            });
+        });
+    });
+</script>
