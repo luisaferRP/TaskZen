@@ -3,8 +3,8 @@
     public class TaskModel
     {
         public int Id { get; set; }
-        public string Title { get; set; }
-        public string Description { get; set; }
+        public string? Title { get; set; }
+        public string? Description { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime? UpdatedDate { get; set; }
         public DateTime? DueDate { get; set; }
@@ -23,8 +23,8 @@ public enum PriorityLevel
 
 public enum StatusLevel
 {
-    ToDo,
-    InProgress,
-    Done
+    Hacer,
+    EnProgreso,
+    Terminado
 }
 

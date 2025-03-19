@@ -1,22 +1,90 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TaskZen.Models.Task;
+using TaskZen.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace TaskZen.Controllers
 {
     public class TasksController : Controller
     {
-        public IActionResult Index()
-        {
+        public readonly AppDbContext _context;
 
-        List<TaskModel> tasks = new List<TaskModel>
+        public TasksController(AppDbContext context)
         {
-            new TaskModel { Id = 1, Title = "Configurar Base de Datos", Description = "Definir estructura inicial", Priority = PriorityLevel.Alta, Status = StatusLevel.ToDo, CreatedDate = DateTime.Now },
-            new TaskModel { Id = 2, Title = "Diseñar UI", Description = "Maquetar pantalla principal", Priority = PriorityLevel.Media, Status = StatusLevel.InProgress, CreatedDate = DateTime.Now },
-            new TaskModel { Id = 3, Title = "Desplegar en Servidor", Description = "Publicar aplicación", Priority = PriorityLevel.Baja, Status = StatusLevel.Done, CreatedDate = DateTime.Now }
+            _context = context;
+        }
 
-        };
+
+        public async Task<IActionResult> Index()
+        {
+            var tasks = await _context.Tasks.ToListAsync();
             return View(tasks);
         }
+
+
+        //crear nueva tarea
+        public IActionResult Nueva()
+        {
+            var model = new TaskModel();
+            //le envio la intancia de TaskModel para poder usar los enum
+            return View("FormularioTarea", model);
+        }
+
+        //editar
+        [HttpGet]
+        public async Task<IActionResult> Editar(int id)
+        {
+            TaskModel task = await _context.Tasks.FindAsync(id);
+
+            if (task == null)
+            {
+                return NotFound();
+            }
+
+            return View("FormularioTarea", task);
+        }
+
+        //metodo para crear o actualizar tarea
+        [HttpPost]
+        public async Task<IActionResult> GuardarTarea(TaskModel task)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("FormularioTarea", task);
+            }
+
+            if (task.Id > 0) 
+            {
+                _context.Tasks.Update(task);
+            }
+            else 
+            {
+                task.CreatedDate = DateTime.Now;
+                await _context.Tasks.AddAsync(task);
+            }
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+
+
+        [HttpDelete]
+        public async Task<IActionResult> Eliminar(int id)
+        {
+            TaskModel task = await _context.Tasks.FindAsync(id);
+
+            if (task == null)
+            {
+                return NotFound();
+            }
+
+            _context.Tasks.Remove(task);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
+
 
     }
 }

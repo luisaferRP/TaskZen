@@ -9,9 +9,9 @@
     <div class="d-flex justify-content-between align-items-center border-bottom pb-2">
         <h3 class="fw-bold">Mis tareas</h3>
         <div>
-            <button class="p-2 bg-info bg-opacity-10 border border-info rounded-4">
+            <a class="p-2 bg-info bg-opacity-10 border border-info rounded-4 text-decoration-none" asp-controller="Tasks" asp-action="Nueva">
                 <i class="bi bi-plus-lg"></i> Nueva tarea
-            </button>
+            </a>
         </div>
     </div>
 </div>
@@ -21,10 +21,10 @@
 
         <!-- To Do -->
         <div class="col-md-4">
-            <div class="task-column todo" id="ToDo">
-                <h3 class="text-dark">To Do</h3>
+            <div class="task-column todo" id="Hacer">
+                <h3 class="text-dark">Hacer</h3>
                 <div class="task-list">
-                    @foreach (var task in Model.Where(t => t.Status == StatusLevel.ToDo))
+                    @foreach (var task in Model.Where(t => t.Status == StatusLevel.Hacer))
                     {
                         @await Html.PartialAsync("_TaskCard", task)
                     }
@@ -34,10 +34,10 @@
 
         <!-- In Progres -->
         <div class="col-md-4">
-            <div class="task-column in-progress" id="InProgress">
-                <h3 class="text-dark">InProgress</h3>
+            <div class="task-column in-progress" id="EnProgreso">
+                <h3 class="text-dark">En Progreso</h3>
                 <div class="task-list">
-                    @foreach (var task in Model.Where(t => t.Status == StatusLevel.InProgress))
+                    @foreach (var task in Model.Where(t => t.Status == StatusLevel.EnProgreso))
                     {
                         @await Html.PartialAsync("_TaskCard", task)
                     }
@@ -47,10 +47,10 @@
 
         <!-- Done -->
         <div class="col-md-4">
-            <div class="task-column done" id="Done">
-                <h3 class="text-dark">Done</h3>
+            <div class="task-column done" id="Terminado">
+                <h3 class="text-dark">Terminado</h3>
                 <div class="task-list">
-                    @foreach (var task in Model.Where(t => t.Status == StatusLevel.Done))
+                    @foreach (var task in Model.Where(t => t.Status == StatusLevel.Terminado))
                     {
                         @await Html.PartialAsync("_TaskCard", task)
                     }

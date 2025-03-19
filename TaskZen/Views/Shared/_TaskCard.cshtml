@@ -11,11 +11,60 @@
      </div>
     <p class="task-description  text-muted  my-2">@Model.Description</p>
     <div class="d-flex justify-content-end">
-        <button class="btn btn-sm btn-outline-secondary edit-task me-2" data-id="@Model.Id">
-            <i class="bi bi-pencil"></i>
-        </button>
+        <a class="btn btn-sm btn-outline-secondary edit-task me-2" asp-controller="Tasks" asp-action="Editar" asp-route-id="@Model.Id">
+            <i class="bi bi-pencil"></i> Editar
+        </a>
+
         <button class="btn btn-sm btn-outline-danger delete-task" data-id="@Model.Id">
             <i class="bi bi-trash"></i>
         </button>
     </div>
 </div>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".delete-task").forEach(button => {
+            button.addEventListener("click", async function () {
+                const taskId = this.getAttribute("data-id");
+
+                // Muestra la alerta de confirmación
+                Swal.fire({
+                    title: "¿Estás seguro?",
+                    text: "Esta acción no se puede deshacer.",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#d33",
+                    cancelButtonColor: "#3085d6",
+                    confirmButtonText: "Sí, eliminar",
+                    cancelButtonText: "Cancelar"
+                }).then(async (result) => {
+                    if (result.isConfirmed) {
+                        const response = await fetch(`/Tasks/Eliminar/${taskId}`, {
+                            method: "DELETE"
+                        });
+
+                        if (response.ok) {
+                            Swal.fire({
+                                position: "top-end",
+                                title: "Eliminado",
+                                text: "La tarea ha sido eliminada con éxito.",
+                                icon: "success",
+                                timer: 2000,
+                                showConfirmButton: false
+                            }).then(() => {
+                                location.reload(); // Recargar la página para actualizar la lista
+                            });
+                        } else {
+                            Swal.fire({
+                                title: "Error",
+                                text: "No se pudo eliminar la tarea.",
+                                icon: "error"
+                            });
+                        }
+                    }
+                });
+            });
+        });
+    });
+</script>
