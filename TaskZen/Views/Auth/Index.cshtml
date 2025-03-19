@@ -1,0 +1,28 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="container-sm text-center mt-5 pt-5" style="max-width: 400px; margin: auto;">
+    <h1>Inicio de Sesión</h1>
+
+    <form class="container-sm p-4">
+        <div class="container-sm mb-3 text-start">
+            <label for="email" class="form-label">Correo Electrónico</label>
+            <input type="email" class="form-control" id="email" placeholder="Ingresa tu correo" required>
+        </div>
+        <div class="container-sm mb-3 text-start">
+            <label for="password" class="form-label">Contraseña</label>
+            <input type="password" class="form-control" id="password" placeholder="Ingresa tu contraseña" required>
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Iniciar Sesión</button>
+    </form>
+
+    <div class="mt-3">
+        <a class="text-decoration-none" asp-area="" asp-controller="Auth" asp-action="Register">Registrarse</a> |
+        <a href="#" class="text-decoration-none">Recuperar Contraseña</a>
+    </div>
+</div>
+
+
+
