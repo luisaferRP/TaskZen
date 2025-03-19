@@ -14,12 +14,13 @@ namespace TaskZen.Controllers
             _context = context;
         }
 
-
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? label = null)
         {
-            var tasks = await _context.Tasks.ToListAsync();
-            return View(tasks);
-        }
+            var task = string.IsNullOrEmpty(label) ? await _context.Tasks.ToListAsync() :
+                await _context.Tasks.Where(t => t.Label.ToString() == label).ToListAsync();
+            return View(task);
+           
+        } 
 
 
         //crear nueva tarea
