@@ -1,6 +1,6 @@
-﻿namespace TaskZen.Models.Task
+﻿namespace TaskZen.Models
 {
-    public class TaskModel
+    public class Task
     {
         public int Id { get; set; }
         public string Title { get; set; }

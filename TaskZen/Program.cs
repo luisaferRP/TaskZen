@@ -1,6 +1,10 @@
 using DotNetEnv;
 using Microsoft.EntityFrameworkCore;
 using TaskZen.Data;
+using TaskZen.Interfaces.IUser;
+using TaskZen.Repositories;
+using TaskZen.Security;
+using TaskZen.Services;
 
 Env.Load();
 
@@ -14,6 +18,13 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<PasswordHasherService>();
+
 
 var app = builder.Build();
 
