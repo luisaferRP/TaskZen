@@ -1,29 +1,32 @@
 ﻿body {
-    font-family: 'Inter', sans-serif; /* Cambia a Poppins si prefieres */
+    font-family: 'Inter', sans-serif; 
 }
 
 .task-column {
-    border-radius: 12px;
-    padding: 15px;
     margin: 10px;
-    min-height: 300px;
     box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease-in-out;
+    min-height: 600px;
+    display: flex;
+    flex-direction: column;
+    background: #f8f9fa; /* Color de fondo opcional */
+    padding: 15px;
+    border-radius: 10px;
 }
 
-.todo {
-    background: #e5d4ff91;
-    border: 1px solid #7B2CBF;
+
+    .task-column:hover {
+        transform: scale(1.02);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+
+.task-list .card {
+    transition: transform 0.3s ease;
 }
 
-.in-progress {
-    background: #fad9b887;
-    border: 1px solid #E07B39;
-}
-
-.done {
-    background: #d4f8e8a6;
-    border: 1px solid #2D6A4F;
-}
+    .task-list .card:hover {
+        transform: translateY(-3px);
+    }
 
 .task-list {
     min-height: 100px;
@@ -31,16 +34,19 @@
 }
 
 .task-card {
-    padding: 10px;
     background: white;
-    border-radius: 5px;
     margin-bottom: 10px;
-    box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+    padding: 12px;
+    border-radius: 8px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease-in-out;
+    border: 1px solid #e0e0e0;
 }
 
 .task-title {
     font-size: 15px;
     font-weight: 700;
+    text-transform: capitalize;
 }
 
 .task-description {
@@ -48,13 +54,110 @@
     color: #6c757d;
 }
 
-.task-card {
-    padding: 12px;
-    border-radius: 8px;
-    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.08);
-}
-
     .task-card .btn {
         padding: 5px 8px;
         font-size: 14px;
     }
+
+
+    .task-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
+    }
+
+/* Diseños de prioridad */
+.priority-badge {
+    padding: 4px 15px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border-radius: 20px;
+    text-transform: uppercase;
+}
+
+    .priority-badge.low {
+        background: rgba(0, 123, 255, 0.1);
+        color: #007bff;
+        border: 1px solid #007bff;
+    }
+
+    .priority-badge.medium {
+        background: rgba(255, 193, 7, 0.1);
+        color: #ffc107;
+        border: 1px solid #ffc107;
+    }
+
+    .priority-badge.high {
+        background: rgba(220, 53, 69, 0.1);
+        color: #dc3545;
+        border: 1px solid #dc3545;
+    }
+
+    .priority-badge.estudio {
+        width: 127px;
+        background-color: #E8F9E8;
+        color: #309035;
+        border: 1px solid #309035;
+    }
+
+    .priority-badge.dormirmejor {
+        width: 127px;
+        background: rgba(0, 123, 255, 0.1);
+        color: #007bff;
+        border: 1px solid #007bff;
+    }
+
+    .priority-badge.ejercicio {
+        width: 127px;
+        background: rgba(255, 193, 7, 0.1);
+        color: #ffc107;
+        border: 1px solid #ffc107;
+    }
+
+    .priority-badge.relajacion {
+        width: 127px;
+        background-color: #EAFBFF;
+        color: #34D3FF;
+        border: 1px solid #34D3FF;
+    }
+    .priority-badge.compras {
+        width: 127px;
+        background: rgba(220, 53, 69, 0.1);
+        color: #dc3545;
+        border: 1px solid #dc3545;
+    }
+
+/* Botones con mejor estilo */
+.edit-task, .delete-task {
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.3s;
+}
+
+.edit-task {
+    background-color: rgba(108, 117, 125, 0.1);
+    color: #6c757d;
+    border: 1px solid transparent;
+}
+
+    .edit-task:hover {
+        background-color: #6c757d;
+        color: white;
+    }
+
+.delete-task {
+    background-color: rgba(220, 53, 69, 0.1);
+    color: #dc3545;
+    border: 1px solid transparent;
+}
+
+    .delete-task:hover {
+        background-color: #dc3545;
+        color: white;
+    }
+
+
+.task-date {
+    width:120px;
+}

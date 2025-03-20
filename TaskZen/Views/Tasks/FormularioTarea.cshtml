@@ -1,0 +1,80 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@model TaskZen.Models.Task;
+
+@{
+    var priotities = Enum.GetValues(typeof(PriorityLevel)).Cast<PriorityLevel>();
+    var statuses = Enum.GetValues(typeof(StatusLevel)).Cast<StatusLevel>();
+    var labels = Enum.GetValues(typeof(LabelLevel)).Cast<LabelLevel>();
+}
+
+
+<div class="container d-flex justify-content-center align-items-center my-5">
+    <div class="card shadow-lg p-4 rounded-4 card-principal">
+
+        <h2 class="text-center mb-3 fw-bold text-primary">@(Model.Id > 0 ? "📌Editar Tarea" : "📌 Nueva Tarea")</h2>
+        <p class="text-muted text-center">Organiza tus tareas de manera sencilla</p>
+
+        <form asp-controller="Tasks" asp-action="GuardarTarea" method="post">
+            <input type="hidden" asp-for="Id" />
+            <div class="mb-3">
+                <label class="form-label fw-bold">Título</label>
+                <input class="form-control rounded-3 shadow-sm" asp-for="Title" placeholder="Ej. Hacer compras" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-bold">Descripción</label>
+                <textarea class="form-control rounded-3 shadow-sm" asp-for="Description" rows="2" placeholder="Ej. Comprar leche, pan y frutas" required></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-bold">Etiqueta</label>
+                <select class="form-select rounded-3 shadow-sm" asp-for="Label">
+                    @foreach (var label in labels)
+                    {
+                        <option value="@label">@label</option>
+                    }
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-bold">Prioridad</label>
+                <select class="form-select rounded-3 shadow-sm" asp-for="Priority">
+                    @foreach (var priority in priotities)
+                    {
+                        <option value="@priority">@priority</option>
+                    }
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-bold">Estado</label>
+                <select class="form-select rounded-3 shadow-sm" asp-for="Status">
+                    @foreach (var status in statuses)
+                    {
+                        <option value="@status">@status</option>
+                    }
+                </select>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label fw-bold">Fecha de Vencimiento</label>
+                <input type="date" class="form-control rounded-3 shadow-sm" asp-for="DueDate">
+            </div>
+
+
+            <div class="d-grid mb-3">
+                <button type="submit" class="btn btn-primary btn-lg rounded-3 shadow-sm boton">
+                    <i class="bi @(Model.Id > 0 ? "bi-pencil-square" : "bi-plus-circle")"></i>
+                    @(Model.Id > 0 ? "Actualizar" : "Crear")
+                </button>
+            </div>
+        </form>
+    </div>
+
+</div>
+
