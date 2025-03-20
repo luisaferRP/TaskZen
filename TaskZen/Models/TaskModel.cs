@@ -1,4 +1,4 @@
-﻿namespace TaskZen.Models.Task
+﻿namespace TaskZen.Models
 {
     public class TaskModel
     {

@@ -22,7 +22,7 @@ namespace TaskZen.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("TaskZen.Models.Task.TaskModel", b =>
+            modelBuilder.Entity("TaskZen.Models.Task", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -59,7 +59,7 @@ namespace TaskZen.Migrations
                     b.ToTable("Tasks");
                 });
 
-            modelBuilder.Entity("TaskZen.Models.User.UserModel", b =>
+            modelBuilder.Entity("TaskZen.Models.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
