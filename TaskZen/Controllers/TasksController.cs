@@ -3,9 +3,11 @@ using TaskZen.Models;
 using TaskZen.Data;
 using Microsoft.EntityFrameworkCore;
 using Task = TaskZen.Models.Task;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TaskZen.Controllers
 {
+    [Authorize]
     public class TasksController : Controller
     {
         public readonly AppDbContext _context;
@@ -17,10 +19,17 @@ namespace TaskZen.Controllers
 
         public async Task<IActionResult> Index(string? label = null)
         {
-            var task = string.IsNullOrEmpty(label) ? await _context.Tasks.ToListAsync() :
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Auth");
+            }
+
+            var tasks = string.IsNullOrEmpty(label) ?
+                await _context.Tasks.ToListAsync() :
                 await _context.Tasks.Where(t => t.Label.ToString() == label).ToListAsync();
-            return View(task);
-        } 
+
+            return View(tasks);
+        }
 
 
         //crear nueva tarea
@@ -67,8 +76,6 @@ namespace TaskZen.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-
-
 
         [HttpDelete]
         public async Task<IActionResult> Eliminar(int id)

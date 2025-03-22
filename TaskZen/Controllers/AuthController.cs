@@ -1,12 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using TaskZen.Config;
 using TaskZen.DTOs;
 using TaskZen.Interfaces.IUser;
 
 namespace TaskZen.Controllers
 {
-    public class AuthController(IUserService userService) : Controller
+    public class AuthController(IUserService userService, JWTConfig jwtConfig) : Controller
     {
         private readonly IUserService _userService = userService;
+        private readonly JWTConfig _jwtConfig = jwtConfig;
 
         public IActionResult Index()
         {
@@ -23,29 +25,48 @@ namespace TaskZen.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View(Register);
+                return View("Register", model);
             }
+
             await _userService.Create(model);
             return RedirectToAction("Index");
         }
+
 
         [HttpPost]
         public async Task<IActionResult> Login(UserLoginDto model)
         {
             if (!ModelState.IsValid)
             {
-                return View(Index);
+                return View("Index", model);
             }
+
             var user = await _userService.GetUserByEmail(model.Email);
-            if (user == null)
+            if (user == null || !_userService.VerifyPassword(user.Password, model.Password))
             {
-                return View(Index);
+                ModelState.AddModelError(string.Empty, "Credenciales incorrectas");
+                return View("Index", model);
             }
-            if (!_userService.VerifyPassword(user.Password, model.Password))
+
+            var token = _jwtConfig.GenerateJwtToken();
+
+            var cookieOptions = new CookieOptions
             {
-                return View(Index);
-            }
+                HttpOnly = true,
+                Secure = false, // Asegúrate de usar HTTPS
+                SameSite = SameSiteMode.Strict,
+                Expires = DateTime.UtcNow.AddMinutes(60)
+            };
+
+            Response.Cookies.Append("AuthToken", token, cookieOptions);
+
             return RedirectToAction("Index", "Tasks");
+        }
+
+        public IActionResult Logout()
+        {
+            Response.Cookies.Delete("AuthToken");
+            return RedirectToAction("Index", "Auth");
         }
     }
 }
