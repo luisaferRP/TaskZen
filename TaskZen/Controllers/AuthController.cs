@@ -48,12 +48,12 @@ namespace TaskZen.Controllers
                 return View("Index", model);
             }
 
-            var token = _jwtConfig.GenerateJwtToken();
+            var token = _jwtConfig.GenerateJwtToken(user.Id, user.Name);
 
             var cookieOptions = new CookieOptions
             {
                 HttpOnly = true,
-                Secure = false, // Asegúrate de usar HTTPS
+                Secure = true, // Asegúrate de usar HTTPS
                 SameSite = SameSiteMode.Strict,
                 Expires = DateTime.UtcNow.AddMinutes(60)
             };
@@ -65,7 +65,17 @@ namespace TaskZen.Controllers
 
         public IActionResult Logout()
         {
-            Response.Cookies.Delete("AuthToken");
+            Response.Cookies.Append("AuthToken", "", new CookieOptions
+            {
+                Expires = DateTime.UtcNow.AddDays(-1),
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.Strict
+            }); 
+
+            // Cerrar sesión en ASP.NET
+            HttpContext.Response.Cookies.Delete("AuthToken");  // Borra la cookie
+
             return RedirectToAction("Index", "Auth");
         }
     }

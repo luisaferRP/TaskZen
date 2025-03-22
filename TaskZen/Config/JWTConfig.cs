@@ -12,7 +12,7 @@ namespace TaskZen.Config
         public string Issuer { get; set; }
         public string Audience { get; set; }
 
-        internal string GenerateJwtToken()
+        internal string GenerateJwtToken(int userId, string userName)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Secret));
 
@@ -20,8 +20,11 @@ namespace TaskZen.Config
 
             var claims = new[]
             {
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()), // Identificador único del token
+                new Claim(JwtRegisteredClaimNames.UniqueName, userName), // Nombre de usuario
+                new Claim(ClaimTypes.NameIdentifier, userId.ToString()) // ID del usuario
             };
+
 
             var token = new JwtSecurityToken(
                 issuer: Issuer,

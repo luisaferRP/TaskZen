@@ -11,6 +11,7 @@
         public StatusLevel Status { get; set; }
         public PriorityLevel Priority { get; set; }
         public LabelLevel Label { get; set; }
+        public int UserId { get; set; }
     }
 }
 
