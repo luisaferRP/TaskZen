@@ -3,22 +3,29 @@
 *@
 @{
 }
-@model List<TaskZen.Models.Task.TaskModel>
+@model List<TaskZen.Models.Task>
 
 <div class="mb-3">
     <h3 class="fw-bold text-dark">
-        Bienvenido/a, <span class="text-primary">Carla</span>
+        Bienvenido/a, <span class="text-primary">@ViewBag.UserName</span>
     </h3>
 </div>
 
+
 <!-- Etiquetas -->
 <div class="d-flex flex-wrap gap-2 justify-content-center">
-    <button class="btn btn-sm border border-primary text-primary bg-primary bg-opacity-10 rounded-pill px-3 betiq">Dormir mejor</button>
-    <button class="btn btn-sm border border-success text-success bg-success bg-opacity-10 rounded-pill px-3 betiq">Estudio</button>
-    <button class="btn btn-sm border border-warning text-warning bg-warning bg-opacity-10 rounded-pill px-3 betiq">Ejercicio</button>
-    <button class="btn btn-sm border border-info text-info bg-info bg-opacity-10 rounded-pill px-3 betiq">Relajación</button>
-    <button class="btn btn-sm border border-danger text-danger bg-danger bg-opacity-10 rounded-pill px-3 betiq">Alimentación</button>
-    <button class="btn btn-sm border border-secondary text-secondary bg-secondary bg-opacity-10 rounded-pill px-3 betiq">Compras</button>
+    <a asp-controller="Tasks" asp-action="Index" asp-route-label=""
+       class="btn btn-sm border border-secondary text-body bg-dark bg-opacity-10 rounded-pill px-3">Todos</a>
+    <a asp-controller="Tasks" asp-action="Index" asp-route-label="DormirMejor" 
+    class="btn btn-sm border border-primary text-primary bg-primary bg-opacity-10 rounded-pill px-3">Dormir mejor</a>
+    <a asp-controller="Tasks" asp-action="Index" asp-route-label="Estudio"
+       class="btn btn-sm border border-success text-success bg-success bg-opacity-10 rounded-pill px-3">Estudio</a>
+    <a asp-controller="Tasks" asp-action="Index" asp-route-label="Ejercicio"
+        class="btn btn-sm border border-warning text-warning bg-warning bg-opacity-10 rounded-pill px-3">Ejercicio</a>
+    <a asp-controller="Tasks" asp-action="Index" asp-route-label="Relajacion"
+        class="btn btn-sm border border-info text-info bg-info bg-opacity-10 rounded-pill px-3">Relajación</a>
+    <a asp-controller="Tasks" asp-action="Index" asp-route-label="Compras"
+        class="btn btn-sm border border-danger text-danger bg-danger bg-opacity-10 rounded-pill px-3">Compras</a>
 </div>
 
 
