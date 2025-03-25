@@ -1,6 +1,7 @@
 using DotNetEnv;
 using Microsoft.EntityFrameworkCore;
 using TaskZen.Data;
+using TaskZen.Interfaces.ITasks;
 using TaskZen.Interfaces.IUser;
 using TaskZen.Repositories;
 using TaskZen.Security;
@@ -56,6 +57,8 @@ builder.Services.AddSingleton(jwtConfiguration);
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<PasswordHasherService>();
+builder.Services.AddScoped<ITasksRepository, TaskRepositoy>();
+
 
 builder.Services.AddAuthentication(options =>
 {
