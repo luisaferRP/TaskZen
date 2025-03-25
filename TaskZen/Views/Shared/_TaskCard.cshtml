@@ -1,4 +1,4 @@
-﻿@model TaskZen.Models.Task
+﻿@model TaskZen.Models.TaskModel
 
 <div class="task-card p-3 rounded-4 shadow-sm bg-white position-relative" id="task-@Model.Id">
     <div class="d-flex justify-content-between align-items-center mb-2">
@@ -69,7 +69,7 @@
                                 timer: 2000,
                                 showConfirmButton: false
                             }).then(() => {
-                                location.reload(); // Recargar la página para actualizar la lista
+                                location.reload();
                             });
                         } else {
                             Swal.fire({

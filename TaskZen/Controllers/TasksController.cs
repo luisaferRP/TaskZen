@@ -2,22 +2,19 @@
 using TaskZen.Models;
 using TaskZen.Data;
 using Microsoft.EntityFrameworkCore;
-using Task = TaskZen.Models.Task;
-using Microsoft.AspNetCore.Authorization;
-using NuGet.Protocol;
+using TaskZen.Repositories;
+using TaskZen.Interfaces.ITasks;
 using System.Security.Claims;
 
 namespace TaskZen.Controllers
 {
-    [Authorize]
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public class TasksController : Controller
     {
-        public readonly AppDbContext _context;
+        private readonly ITasksRepository _taskRepository;
 
-        public TasksController(AppDbContext context)
+        public TasksController(ITasksRepository taskRepository)
         {
-            _context = context;
+            _taskRepository = taskRepository;
         }
 
         public async Task<IActionResult> Index(string? label = null)
@@ -37,10 +34,8 @@ namespace TaskZen.Controllers
 
             int userId = int.Parse(userIdClaim); // Convertir el userId a entero
 
-            // Obtener las tareas filtradas por usuario
-            var tasks = string.IsNullOrEmpty(label) ?
-                await _context.Tasks.Where(t => t.UserId == userId).ToListAsync() :
-                await _context.Tasks.Where(t => t.UserId == userId && t.Label.ToString() == label).ToListAsync();
+            var tasks = await _taskRepository.GetTasks(label, userId);
+
 
             // Pasar el nombre del usuario a la vista
             ViewBag.UserName = User.Identity.Name;
@@ -48,68 +43,52 @@ namespace TaskZen.Controllers
             return View(tasks);
         }
 
-
-        //crear nueva tarea
+        //crear
         public IActionResult Nueva()
         {
-            var model = new Task();
-            //le envio la intancia de TaskModel para poder usar los enum
-            return View("FormularioTarea", model);
+            return View("FormularioTarea", new TaskModel());
         }
 
-        //editar
+
+        //actualizar
         [HttpGet]
         public async Task<IActionResult> Editar(int id)
         {
-            Task task = await _context.Tasks.FindAsync(id);
-
+            var task = await _taskRepository.GetById(id);
             if (task == null)
             {
                 return NotFound();
             }
-
             return View("FormularioTarea", task);
         }
 
-        //metodo para crear o actualizar tarea
+
         [HttpPost]
-        public async Task<IActionResult> GuardarTarea(Task task)
+        public async Task<IActionResult> GuardarTarea(TaskModel task)
         {
-            if (!ModelState.IsValid)
-            {
-                return View("FormularioTarea", task);
-            }
+            if (!ModelState.IsValid) return View("FormularioTarea", task);
 
             task.UserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
 
-            if (task.Id > 0) 
+            if (task.Id > 0)
             {
-                _context.Tasks.Update(task);
+                await _taskRepository.Update(task);
             }
-            else 
+            else
             {
                 task.CreatedDate = DateTime.Now;
-                await _context.Tasks.AddAsync(task);
+                await _taskRepository.Add(task);
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        [HttpDelete]
+        //eliminar
         public async Task<IActionResult> Eliminar(int id)
         {
-            Task task = await _context.Tasks.FindAsync(id);
-
-            if (task == null)
-            {
-                return NotFound();
-            }
-
-            _context.Tasks.Remove(task);
-            await _context.SaveChangesAsync();
-
+            await _taskRepository.Delete(id);
             return RedirectToAction(nameof(Index));
+
         }
     }
 }

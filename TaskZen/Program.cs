@@ -1,6 +1,7 @@
 using DotNetEnv;
 using Microsoft.EntityFrameworkCore;
 using TaskZen.Data;
+using TaskZen.Interfaces.ITasks;
 using TaskZen.Interfaces.IUser;
 using TaskZen.Repositories;
 using TaskZen.Security;
@@ -10,15 +11,33 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
-Env.Load();
-
 var builder = WebApplication.CreateBuilder(args);
 
-var Connection = Environment.GetEnvironmentVariable("CONNECTION_STRING");
+var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
 
-//Cadena de conexión de sql server
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(Connection));
+if (env == "Development")
+{
+    Env.Load(".env.local");
+    var Connection = Environment.GetEnvironmentVariable("CONNECTION_STRING");
+
+    //Cadena de conexión de sql server
+    builder.Services.AddDbContext<AppDbContext>(options =>
+        options.UseSqlServer(Connection));
+}
+else
+{
+    Env.Load(".env.production");
+    var dbHost = Environment.GetEnvironmentVariable("DB_HOST");
+    var dbPort = Environment.GetEnvironmentVariable("DB_PORT");
+    var dbDatabaseName = Environment.GetEnvironmentVariable("DB_DATABASE");
+    var dbUser = Environment.GetEnvironmentVariable("DB_USERNAME");
+    var dbPassword = Environment.GetEnvironmentVariable("DB_PASSWORD");
+
+    var connectionDB = $"server={dbHost};port={dbPort};database={dbDatabaseName};uid={dbUser};password={dbPassword}";
+
+    builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseMySql(connectionDB, ServerVersion.Parse("8.0.20-mysql")));
+}
 
 var jwtConfiguration = new JWTConfig()
 {
@@ -38,6 +57,8 @@ builder.Services.AddSingleton(jwtConfiguration);
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<PasswordHasherService>();
+builder.Services.AddScoped<ITasksRepository, TaskRepositoy>();
+
 
 builder.Services.AddAuthentication(options =>
 {
