@@ -18,10 +18,11 @@
     @if (User.Identity.IsAuthenticated)
     {
         <header>
-            <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white mb-3">
                 <div class="container-fluid">
                     <a class="navbar-brand d-flex align-items-center" asp-area="" asp-controller="Tasks" asp-action="Index">
-                        <i class="bi bi-kanban me-2"></i> TaskZen
+                        <img src="~/img/Logo.png"
+                             alt="Logo" class="img-fluid" style="max-height: 50px;" /> TaskZen
                     </a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
@@ -32,7 +33,7 @@
                         <ul class="navbar-nav ms-auto">
                             <li class="nav-item">
                                 <a class="nav-link text-dark d-flex align-items-center" asp-area="" asp-controller="Auth" asp-action="Logout">
-                                    <i class="bi bi-box-arrow-right me-2"></i> Cerrar sesión
+                                    <i class="bi bi-box-arrow-right me-2"></i>Salir
                                 </a>
                             </li>
                         </ul>
