@@ -8,10 +8,5 @@ namespace TaskZen.Data
     {
             public DbSet<User> Users { get; set; }
             public DbSet<TaskModel> Tasks { get; set; }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning));
-        }
     }
 }

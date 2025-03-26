@@ -13,31 +13,17 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
+Env.Load();
+var dbHost = Environment.GetEnvironmentVariable("DB_HOST");
+var dbPort = Environment.GetEnvironmentVariable("DB_PORT");
+var dbDatabaseName = Environment.GetEnvironmentVariable("DB_DATABASE");
+var dbUser = Environment.GetEnvironmentVariable("DB_USERNAME");
+var dbPassword = Environment.GetEnvironmentVariable("DB_PASSWORD");
 
-if (env == "Development")
-{
-    Env.Load(".env.local");
-    var Connection = Environment.GetEnvironmentVariable("CONNECTION_STRING");
+var connectionDB = $"server={dbHost};port={dbPort};database={dbDatabaseName};uid={dbUser};password={dbPassword}";
 
-    //Cadena de conexión de sql server
-    builder.Services.AddDbContext<AppDbContext>(options =>
-        options.UseSqlServer(Connection));
-}
-else
-{
-    Env.Load(".env.production");
-    var dbHost = Environment.GetEnvironmentVariable("DB_HOST");
-    var dbPort = Environment.GetEnvironmentVariable("DB_PORT");
-    var dbDatabaseName = Environment.GetEnvironmentVariable("DB_DATABASE");
-    var dbUser = Environment.GetEnvironmentVariable("DB_USERNAME");
-    var dbPassword = Environment.GetEnvironmentVariable("DB_PASSWORD");
-
-    var connectionDB = $"server={dbHost};port={dbPort};database={dbDatabaseName};uid={dbUser};password={dbPassword}";
-
-    builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseMySql(connectionDB, ServerVersion.Parse("8.0.20-mysql")));
-}
+builder.Services.AddDbContext<AppDbContext>(options =>
+options.UseMySql(connectionDB, ServerVersion.Parse("8.0.20-mysql")));
 
 var jwtConfiguration = new JWTConfig()
 {
@@ -46,7 +32,6 @@ var jwtConfiguration = new JWTConfig()
     Issuer = Environment.GetEnvironmentVariable("JWT_ISSUER"),
     Audience = Environment.GetEnvironmentVariable("JWT_AUDIENCE")
 };
-
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
