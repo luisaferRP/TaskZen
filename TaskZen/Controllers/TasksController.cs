@@ -9,6 +9,7 @@ using TaskZen.DTOs;
 
 namespace TaskZen.Controllers
 {
+    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public class TasksController : Controller
     {
         private readonly ITasksRepository _taskRepository;
