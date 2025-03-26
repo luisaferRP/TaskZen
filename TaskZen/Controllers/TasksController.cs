@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using TaskZen.Repositories;
 using TaskZen.Interfaces.ITasks;
 using System.Security.Claims;
+using TaskZen.DTOs;
 
 namespace TaskZen.Controllers
 {
@@ -90,5 +91,41 @@ namespace TaskZen.Controllers
             return RedirectToAction(nameof(Index));
 
         }
+
+        [HttpPost]
+        public async Task<IActionResult> ActualizarEstadoTarea([FromBody] UpdateTaskStatusDto model)
+        {
+            try
+            {
+                if (model == null || model.Id <= 0)
+                {
+                    return Json(new { success = false, message = "Datos inválidos" });
+                }
+
+                var task = await _taskRepository.GetById(model.Id);
+                if (task == null)
+                {
+                    return Json(new { success = false, message = "Tarea no encontrada" });
+                }
+
+                if (!Enum.IsDefined(typeof(StatusLevel), model.Status))
+                {
+                    return Json(new { success = false, message = "Estado inválido" });
+                }
+
+                task.Status = (StatusLevel)model.Status;
+                await _taskRepository.Update(task);
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error en ActualizarEstadoTarea: {ex.Message}");
+                return StatusCode(500, new { success = false, message = "Error interno del servidor" });
+            }
+        }
+
+
+
+
     }
 }
