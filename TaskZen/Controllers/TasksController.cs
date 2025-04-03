@@ -124,9 +124,5 @@ namespace TaskZen.Controllers
                 return StatusCode(500, new { success = false, message = "Error interno del servidor" });
             }
         }
-
-
-
-
     }
 }

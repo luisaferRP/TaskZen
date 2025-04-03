@@ -41,10 +41,21 @@ namespace TaskZen.Repositories
 
         public async Task<List<TaskModel>> GetTasks(string? label, int userId)
         {
-            return string.IsNullOrEmpty(label) ?
-                await _context.Tasks.Where(t => t.UserId == userId).ToListAsync() :
-                await _context.Tasks.Where(t => t.UserId == userId && t.Label.ToString() == label).ToListAsync();
+            if (string.IsNullOrEmpty(label))
+            {
+                return await _context.Tasks.Where(t => t.UserId == userId).ToListAsync();
+            }
+
+            // Intentar convertir el string a enum
+            if (Enum.TryParse<LabelLevel>(label, out var labelEnum))
+            {
+                return await _context.Tasks.Where(t => t.UserId == userId && t.Label == labelEnum).ToListAsync();
+            }
+
+            // Si no se pudo convertir, devolver lista vacía
+            return new List<TaskModel>();
         }
+
 
         public async Task Update(TaskModel task)
         {
