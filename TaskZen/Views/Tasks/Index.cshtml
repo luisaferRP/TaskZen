@@ -1,0 +1,81 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model List<TaskZen.Models.TaskModel>
+
+<div class="mb-3">
+    <h3 class="fw-bold text-dark">
+        Bienvenido/a, <span class="text-primary">Carla</span>
+    </h3>
+</div>
+
+
+
+<!-- Etiquetas -->
+<div class="d-flex flex-wrap gap-2 justify-content-center">
+    <a asp-controller="Tasks" asp-action="Index" asp-route-label=""
+       class="btn btn-sm border border-secondary text-body bg-dark bg-opacity-10 rounded-pill px-3">Todos</a>
+    <a asp-controller="Tasks" asp-action="Index" asp-route-label="DormirMejor" 
+    class="btn btn-sm border border-primary text-primary bg-primary bg-opacity-10 rounded-pill px-3">Dormir mejor</a>
+    <a asp-controller="Tasks" asp-action="Index" asp-route-label="Estudio"
+       class="btn btn-sm border border-success text-success bg-success bg-opacity-10 rounded-pill px-3">Estudio</a>
+    <a asp-controller="Tasks" asp-action="Index" asp-route-label="Ejercicio"
+        class="btn btn-sm border border-warning text-warning bg-warning bg-opacity-10 rounded-pill px-3">Ejercicio</a>
+    <a asp-controller="Tasks" asp-action="Index" asp-route-label="Relajacion"
+        class="btn btn-sm border border-info text-info bg-info bg-opacity-10 rounded-pill px-3">Relajación</a>
+    <a asp-controller="Tasks" asp-action="Index" asp-route-label="Compras"
+        class="btn btn-sm border border-danger text-danger bg-danger bg-opacity-10 rounded-pill px-3">Compras</a>
+</div>
+
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center pb-3">
+        <h4 class="fw-bold text-dark">📌 Mis Tareas</h4>
+        <a class="p-2 bg-info bg-opacity-10 border border-info rounded-4 text-decoration-none" asp-controller="Tasks" asp-action="Nueva">
+            <i class="bi bi-plus-lg"></i> Nueva tarea
+        </a>
+    </div>
+
+    <div class="row g-4">
+        <!-- To Do -->
+        <div class="col-md-4">
+            <div class="task-column shadow-sm p-3 rounded-4 bg-light">
+                <h4 class="fw-bold text-secondary">🔹 Hacer</h4>
+                <div class="task-list d-flex flex-column gap-3">
+                    @foreach (var task in Model.Where(t => t.Status == StatusLevel.Hacer))
+                    {
+                        @await Html.PartialAsync("_TaskCard", task)
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- In Progress -->
+        <div class="col-md-4">
+            <div class="task-column shadow-sm p-3 rounded-4 bg-light">
+                <h4 class="fw-bold text-primary">🟡 En Progreso</h4>
+                <div class="task-list d-flex flex-column gap-3">
+                    @foreach (var task in Model.Where(t => t.Status == StatusLevel.EnProgreso))
+                    {
+                        @await Html.PartialAsync("_TaskCard", task)
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Done -->
+        <div class="col-md-4">
+            <div class="task-column shadow-sm p-3 rounded-4 bg-light">
+                <h4 class="fw-bold text-success">✅ Terminado</h4>
+                <div class="task-list d-flex flex-column gap-3">
+                    @foreach (var task in Model.Where(t => t.Status == StatusLevel.Terminado))
+                    {
+                        @await Html.PartialAsync("_TaskCard", task)
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
